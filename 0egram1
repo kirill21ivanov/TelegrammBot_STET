@@ -1,0 +1,362 @@
+// ЗАПИСЬ В ФАЙЛ С НУМЕРАЦИЕЙ
+@bot.message_handler(func=lambda message: True)
+def handle_user_input(message):
+    try:
+        # Откройте файл для чтения и получите количество строк
+        with open("bk.txt", 'r') as fail:
+            lin = fail.readlines()
+            number_of_lines = len(lin)
+        
+        # Теперь откройте файл для добавления и добавьте новую строку
+        with open("bk.txt", 'a') as fail:
+            fail.write(f"{number_of_lines + 1}: User ID: {message.from_user.id}, Message: {message.text}\n")
+    except Exception as error:
+        print(f"Произошла ошибка: {error}")
+
+
+//ВЫВОДИТ ВСЕ ЧТО ЕСТЬ В ФАЙЛЕ
+    with open("bk.txt", "r") as file:
+        file_contents = file.read()
+        print(file_contents)
+        bot.send_message(message.chat.id, file_contents)
+
+//БАН
+import telebot
+
+# Ваш токен бота
+TOKEN = 'ваш_токен'
+
+# Создаем объект бота
+bot = telebot.TeleBot(TOKEN)
+
+# Функция для выдачи мута пользователю по его ID
+def mute_user(user_id, duration_seconds):
+    try:
+        # Вызываем метод restrict_chat_member для выдачи мута
+        bot.restrict_chat_member(chat_id=chat_id, user_id=user_id, can_send_messages=False, until_date=duration_seconds)
+        return True  # Успешно выдан мут
+    except telebot.apihelper.ApiTelegramException as e:
+        print(f"Ошибка при выдаче мута: {e}")
+        return False  # Произошла ошибка при выдаче мута
+
+# Пример использования функции для выдачи мута пользователю
+user_id_to_mute = 123456789  # Замените на ID пользователя, которому хотите выдать мут
+duration_seconds = 3600  # Продолжительность мута в секундах (1 час в данном случае)
+
+if mute_user(user_id_to_mute, duration_seconds):
+    print(f"Мут выдан пользователю с ID {user_id_to_mute} на {duration_seconds} секунд.")
+else:
+    print(f"Не удалось выдать мут пользователю с ID {user_id_to_mute}.")
+
+# Запуск бота
+bot.polling()
+
+
+
+@bot.message_handler(commands=['basa'])
+def message(message):
+    body = types.InlineKeyboardMarkup(row_width=1)
+    button2 = types.InlineKeyboardButton("Скрыть", callback_data="block")
+    body.add(button2)
+    if str(message.chat.id) != "870163214":
+        bot.send_message(message.chat.id, "У вас нет прав выполнить данную команду.", reply_markup=body)
+        return 0
+    else:
+        with open("bk.txt", 'r') as fail:
+            lin = fail.readlines()
+            number_of_lines = len(lin)
+        if (number_of_lines == 0):
+            try:
+                user_id = message.chat.id
+                bot.delete_message(user_id, message.message_id)
+            except telebot.apihelper.ApiTelegramException as e:
+                print(f"Ошибка при удалении сообщения: {e}")
+            bot.send_message(message.chat.id, "База данных пустая!", reply_markup=body)
+        else:
+            with open("bk.txt", "r") as file:
+                body = types.InlineKeyboardMarkup(row_width=1)
+                button2 = types.InlineKeyboardButton("Скрыть", callback_data="block")
+                body.add(button2)
+                try:
+                    user_id = message.chat.id
+                    bot.delete_message(user_id, message.message_id)
+                except telebot.apihelper.ApiTelegramException as e:
+                    print(f"Ошибка при удалении сообщения: {e}")
+                file_contents = file.read()
+                print(file_contents)
+                bot.send_message(message.chat.id, file_contents, reply_markup=body)
+
+
+/// удалить все из файла!!
+    with open("bk.txt", "w") as file:
+        pass
+
+
+// перенос данных
+# Укажите пути к исходному и целевому файлам
+source_file_path = "исходный_файл.txt"
+target_file_path = "целевой_файл.txt"
+
+# Открываем исходный файл для чтения и целевой файл для записи
+with open(source_file_path, "r") as source_file, open(target_file_path, "w") as target_file:
+    # Читаем содержимое исходного файла
+    content = source_file.read()
+    
+    # Записываем содержимое в целевой файл
+    target_file.write(content)
+
+print(f"Содержимое файла {source_file_path} успешно скопировано в файл {target_file_path}.")
+
+
+///ПЕРЕВОД ИД В НИК НЕЙМ
+second_text_name = None
+try:
+    user_chat = bot.get_chat(second_text)
+    if user_chat.username:
+        second_text_name = "@" + user_chat.username
+    else:
+        second_text_name = user_chat.first_name
+except telebot.apihelper.ApiTelegramException as e:
+    print(f"Error while fetching user's chat information: {e}")
+
+button_i = types.InlineKeyboardButton(f"{trimmed_text} {second_text} {second_text_name}", callback_data=callback_data)
+
+
+
+            # # Чтение файла и поиск строк с заданным началом
+            # with open('report_mess.txt', 'r') as file:
+            #     for line in file:
+            #         if line.startswith(number_in_file):
+            #             found_lines.append(line)
+
+            # # Вывод найденных строк
+            # if found_lines:
+            #     print(f"Найдены строки, начинающиеся с '{number_in_file}':")
+            #     for line in found_lines:
+            #         print(line.strip())  # Удаляем лишние пробелы и символы переноса строки
+            # else:
+            #     print(f"Строки, начинающиеся с '{number_in_file}', не найдены в файле.")
+
+
+
+// код рассылки 
+
+    @bot.message_handler(commands=['a'])
+    def message(message):
+        if message.chat.id == config.ADMIN or message.chat.id == config.ADMIN2:
+            for user in file_users:
+                admin = types.InlineKeyboardMarkup(row_width=1)
+                ok = types.InlineKeyboardButton("Хорошо!", callback_data="block")
+                admin.add(ok)
+                try:
+                    user_id = message.chat.id
+                    bot.delete_message(user_id, message.message_id)
+                except telebot.apihelper.ApiTelegramException as e:
+                    print(f"Ошибка при удалении сообщения: {e}")
+                trimmed_text = message.text[message.text.find(' '):].strip()
+                if (trimmed_text == 'a'):
+                    print("error")
+                else:
+                    try:
+                        bot.send_message(user, f"🔔Рассылка:\n{trimmed_text}", reply_markup=admin)
+                    except telebot.apihelper.ApiTelegramException as e:
+                        print(f"Ошибка при удалении сообщения: {e}")
+        else:
+            bot.send_message(message.chat.id, "У вас нет прав выполнить данную команду.")
+            return 0
+        
+
+
+        ////
+Вместо `message.text` в этом коде можно использовать другие атрибуты объекта `message` для более точного определения сообщения, которое вы хотите удалить. В зависимости от вашей конкретной задачи и структуры вашего кода, вы можете использовать следующие атрибуты `message`:
+
+1. `message.message_id`: Этот атрибут содержит уникальный идентификатор сообщения. Вы можете использовать его, чтобы указать конкретное сообщение для удаления.
+
+```python
+bot.delete_message(message.chat.id, message.message_id)
+```
+
+2. `message.reply_to_message`: Если вы хотите удалить ответ на определенное сообщение, вы можете использовать этот атрибут для получения информации о сообщении, на которое был дан ответ, и затем удалить это сообщение.
+
+```python
+if message.reply_to_message:
+    bot.delete_message(message.chat.id, message.reply_to_message.message_id)
+```
+
+3. `message.from_user.id`: Если вам нужно удалить сообщения только от определенного пользователя, вы можете использовать атрибут `from_user` для доступа к информации о пользователе и его `id`.
+
+```python
+if message.from_user.id == desired_user_id:
+    bot.delete_message(message.chat.id, message.message_id)
+```
+
+Замените `desired_user_id` на идентификатор пользователя, чьи сообщения вы хотите удалить.
+
+Выбор подходящего атрибута зависит от вашей конкретной логики удаления сообщений в вашем приложении Telegram.
+
+
+/////
+
+
+import telebot
+
+# Замените 'YOUR_API_TOKEN' на ваш токен API бота
+bot = telebot.TeleBot('YOUR_API_TOKEN')
+
+@bot.message_handler(commands=['start'])
+def handle_start(message):
+    # Отправляем текст и изображение
+    text = "Привет! Это текст к изображению."
+    with open('path/to/your/image.jpg', 'rb') as photo:
+        bot.send_photo(message.chat.id, photo, caption=text, parse_mode="HTML")
+
+# Запускаем бота
+bot.polling(none_stop=True)
+
+
+
+/////мат
+
+pip install pyTelegramBotAPI profanity-check
+
+import telebot
+from profanity_check import predict
+
+# Замените 'YOUR_API_TOKEN' на ваш токен API бота
+bot = telebot.TeleBot('YOUR_API_TOKEN')
+
+@bot.message_handler(func=lambda message: True)
+def check_for_profanity(message):
+    # Анализируем текст сообщения на наличие матерных слов
+    text = message.text
+    is_profanity = any(predict([text]))
+    
+    if is_profanity:
+        # Если сообщение содержит мат, удаляем его
+        bot.delete_message(message.chat.id, message.message_id)
+
+# Запускаем бота
+bot.polling(none_stop=True)
+
+
+//// проверка json
+
+    @bot.message_handler(commands=['bot'])
+    def handle_start(message):
+        bot.send_message(message.chat.id, 'Привет! Отправьте мне данные, и я сохраню их в JSON.')
+
+    @bot.message_handler(func=lambda message: True)
+    def handle_message(message):
+        user_id = message.from_user.id
+        user_data = {
+            'user_id': user_id,
+            'message_text': message.text
+        }
+
+        with open(f'users/{user_id}.json', 'w') as file:
+            json.dump(user_data, file)
+        bot.send_message(message.chat.id, 'Данные сохранены в JSON.')
+
+
+        /// Интересное
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    keyboard_markup = types.ReplyKeyboardMarkup(row_width=2)
+    btn_today = types.KeyboardButton('/today')
+    btn_tomorrow = types.KeyboardButton('tomorrow')
+    keyboard_markup.add(btn_today, btn_tomorrow)
+    bot.send_message(message.chat.id, 'clear_schedule', reply_markup=keyboard_markup)
+
+
+@bot.message_handler(commands=["today"])
+def add_user_handler(message):
+    bot.send_message(message.chat.id, 'ну вот тебе и today')
+
+    ///
+
+import telebot
+from telebot import types
+
+# Инициализируйте бота с вашим токеном
+bot = telebot.TeleBot("6425671606:AAEL9iDyfK_DlJbfTEltuHtA9tefXI0prxI")
+
+# Создайте клавиатуру с кнопками
+keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+# Создайте кнопки и добавьте их в клавиатуру
+button1 = types.KeyboardButton("Кнопка 1")
+button2 = types.KeyboardButton("Кнопка 2")
+button3 = types.KeyboardButton("Кнопка 3")
+
+# Добавьте кнопки к клавиатуре
+keyboard.add(button1, button2)
+keyboard.add(button3)
+
+# Отправьте сообщение с клавиатурой в чат
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Привет! Я бот с кнопками. Выбери опцию:", reply_markup=keyboard)
+
+# Обработка нажатий на кнопки
+@bot.message_handler(func=lambda message: True)
+def handle_buttons(message):
+    if message.text == "Кнопка 1":
+        bot.reply_to(message, "Вы нажали на Кнопку 1")
+    elif message.text == "Кнопка 2":
+        bot.reply_to(message, "Вы нажали на Кнопку 2")
+    elif message.text == "Кнопка 3":
+        bot.reply_to(message, "Вы нажали на Кнопку 3")
+
+# Запуск бота
+
+
+import telebot
+from telebot import types
+
+# Инициализируйте вашего бота
+bot = telebot.TeleBot("6425671606:AAEL9iDyfK_DlJbfTEltuHtA9tefXI0prxI")
+
+# Обработчик команды /start
+@bot.message_handler(commands=['start'])
+def start(message):
+    user_id = message.chat.id
+
+    # Создайте клавиатуру
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    request_contact_button = types.KeyboardButton("Предоставить номер телефона", request_contact=True)
+    keyboard.add(request_contact_button)
+
+    # Отправьте сообщение с клавиатурой
+    bot.send_message(user_id, "Нажмите кнопку 'Предоставить номер телефона', чтобы предоставить свой номер телефона:", reply_markup=keyboard)
+
+# Обработчик предоставленного контакта
+@bot.message_handler(content_types=['contact'])
+def handle_contact(message):
+    user_id = message.chat.id
+    contact = message.contact
+
+    # Извлеките информацию о контакте
+    phone_number = contact.phone_number
+    first_name = contact.first_name
+
+    response = f"Вы предоставили свой номер телефона: {phone_number}\nИмя: {first_name}"
+    bot.send_message(user_id, response)
+
+# Запустите вашего бота
+bot.polling()
+
+////
+
+        if (one == 1):
+            print("error")
+            bot.answer_callback_query(call.id, text='⭕️Вы уже нажимали на эту кнопку!⭕️')
+        else:
+            print(1)
+
+
+                    markup_request = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    KeyboardButton('Отправить свой контакт ☎️', request_contact=True)
+).add(
+    KeyboardButton('Отправить свою локацию 🗺️', request_location=True)
+)
